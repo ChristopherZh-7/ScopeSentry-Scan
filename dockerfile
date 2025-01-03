@@ -11,7 +11,9 @@ RUN apt-get update && apt-get install -y \
     vim \
     tzdata \
     libpcap-dev \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
+    
 # 拷贝当前目录下的可执行文件到容器中
 COPY dist/ScopeSentry-Scan_linux_amd64_v1/ScopeSentry /apps/ScopeSentry
 RUN chmod +x /apps/ScopeSentry
@@ -20,6 +22,11 @@ RUN mkdir /apps/ext/rad
 RUN mkdir /apps/ext/ksubdomain
 RUN mkdir /apps/ext/rustscan
 RUN mkdir /apps/ext/katana
+RUN mkdir /apps/ext/xray
+
+# 复制并解压xray
+COPY xray.zip /apps/ext/xray/
+RUN cd /apps/ext/xray && unzip xray.zip && chmod +x xray
 
 COPY tools/linux/ksubdomain /apps/ext/ksubdomain/ksubdomain
 RUN chmod +x /apps/ext/ksubdomain/ksubdomain
